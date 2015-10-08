@@ -1,26 +1,30 @@
 #bestpractice
 
+## bestpractice-dao-service
+
+æŠŠdaoç±»å’Œmodelç±»è¿›è¡ŒæŠ½è±¡å’Œç»Ÿä¸€ï¼Œç®€åŒ–daoå±‚çš„ä»£ç ç¼–å†™ï¼Œç»Ÿä¸€é£æ ¼ï¼Œé€šè¿‡ä½¿ç”¨mybatisçš„mapperç±»ç»§æ‰¿çš„æ–¹å¼æ¥å®ç°ï¼Œå› æ­¤æ¨èä½¿ç”¨mybatisä½œä¸ºormæ¡†æ¶
+
 ## bestpractice-code-generate
 
-ÓÃÀ´Éú³Émapper.xmlÎÄ¼ş
+ç”¨æ¥æ ¹æ®create sqlè¯­å¥ç”Ÿæˆmapper.xmlé…ç½®å’Œmodelç±»ï¼Œè¿›ä¸€æ­¥å‡å°‘ä»£ç çš„ç¼–å†™
 
-### Æô¶¯ºÍ·ÃÎÊ
-* Æô¶¯£ºmvn jetty:run
-* ·ÃÎÊ£ºhttp://localhost:8081/mapper/showForm
+### å¯åŠ¨å’Œè®¿é—®
+* å¯åŠ¨ï¼šmvn jetty:run
+* è®¿é—®ï¼šhttp://localhost:8081/mapper/showForm
 
-### ²Ù×÷²½Öè
-Ö»ĞèÒªÊäÈëÈı¸öÄÚÈİ:
-1. MapperÀàµÄÈ«Ãû£¬±ÈÈç£ºcom.schoolcook.dao.mapper.UserMapper
-2. ModelÀàµÄÀàÃû£º±ÈÈç£ºUser
-3. ÊäÈëcreate sql£¬²»°üº¬Ö÷¼ü¡¢Íâ¼üµÈ£¬×¢Òâ×îºóÒ»¸ö×Ö¶ÎµÄÄ©Î²²»ÄÜÓĞ¶ººÅ¡£±ÈÈç£º
+### æ“ä½œæ­¥éª¤
+åªéœ€è¦è¾“å…¥ä¸‰ä¸ªå†…å®¹:
+1. Mapperç±»çš„å…¨åï¼Œæ¯”å¦‚ï¼šcom.schoolcook.dao.mapper.UserMapper
+2. Modelç±»çš„ç±»åï¼šæ¯”å¦‚ï¼šUser
+3. è¾“å…¥create sqlï¼Œä¸åŒ…å«ä¸»é”®ã€å¤–é”®ç­‰ï¼Œæ³¨æ„æœ€åä¸€ä¸ªå­—æ®µçš„æœ«å°¾ä¸èƒ½æœ‰é€—å·ã€‚æ¯”å¦‚ï¼š
 
 ```
 CREATE TABLE `user` (
-  `seq` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Ğ¦»°µÄĞòºÅ',
-  `uid` bigint(20) unsigned NOT NULL COMMENT 'ÎÄ±¾Ğ¦»°µÄÎ¨Ò»±êÊ¶£¬¸ù¾İcontext×ömd5µÃµ½',
-  `context` blob NOT NULL COMMENT 'Ğ¦»°ÎÄ±¾',
-  `lmt` datetime NOT NULL COMMENT '×îºóĞŞ¸ÄÊ±¼ä'
+  `seq` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ç¬‘è¯çš„åºå·',
+  `uid` bigint(20) unsigned NOT NULL COMMENT 'æ–‡æœ¬ç¬‘è¯çš„å”¯ä¸€æ ‡è¯†ï¼Œæ ¹æ®contextåšmd5å¾—åˆ°',
+  `context` blob NOT NULL COMMENT 'ç¬‘è¯æ–‡æœ¬',
+  `lmt` datetime NOT NULL COMMENT 'æœ€åä¿®æ”¹æ—¶é—´'
 )
 ```
-4. È»ºóµã»÷¡°submit¡±£¬¾Í»áÔÚÏÂÃæµÄÎÄ±¾¿òÖĞÉú³Émapper.xml
-5. °Ñxml copyµ½eclipseµÄxmlÎÄ¼şÖĞ½øĞĞ¸ñÊ½»¯¼´¿ÉÊ¹ÓÃ
+4. ç„¶åç‚¹å‡»â€œsubmitâ€ï¼Œå°±ä¼šåœ¨ä¸‹é¢çš„æ–‡æœ¬æ¡†ä¸­ç”Ÿæˆmapper.xml
+5. æŠŠxml copyåˆ°eclipseçš„xmlæ–‡ä»¶ä¸­è¿›è¡Œæ ¼å¼åŒ–å³å¯ä½¿ç”¨
