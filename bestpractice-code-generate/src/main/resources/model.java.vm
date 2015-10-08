@@ -1,0 +1,33 @@
+
+import java.io.Serializable;
+
+import com.bestpractice.dao.mybatis.model.PersonModel;
+import java.util.Date;
+
+
+public class ${modelClassName} extends PersonModel implements Serializable {
+
+	private static final long serialVersionUID = ${serialVersionUID};
+	#foreach($columnDef in $!columnDefList)
+		#if($!{columnDef.columnName}=="creator" || $!{columnDef.columnName}=="modifier"|| $!{columnDef.columnName}=="gmtModified"|| $!{columnDef.columnName}=="gmtCreated"|| $!{columnDef.columnName}=="uuid")
+			## skip
+		#else
+			private $!{columnDef.javaType} $!{columnDef.columnName};
+		#end
+	#end
+	
+	#foreach($columnDef in $!columnDefList)
+		#if($!{columnDef.columnName}=="creator" || $!{columnDef.columnName}=="modifier"|| $!{columnDef.columnName}=="gmtModified"|| $!{columnDef.columnName}=="gmtCreated"|| $!{columnDef.columnName}=="uuid")
+			## skip
+		#else
+			public $!{columnDef.javaType} $!{columnDef.getterMethodName}() {
+				return $!{columnDef.columnName};
+			}
+		
+			public void $!{columnDef.setterMethodName}($!{columnDef.javaType} $!{columnDef.columnName}) {
+				this.$!{columnDef.columnName} = $!{columnDef.columnName};
+			}
+		#end
+		
+	#end
+}

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="${mappClassNameWithPackage}">
+
+	<cache />
+
+	<select id="select" resultType="${modelClassName}">
+		SELECT
+			#foreach($columnDef in $!columnDefList)
+				#if($columnDefList.size() == $velocityCount)
+					$!{columnDef.getUnderLineColumnName()}
+				#else
+					$!{columnDef.getUnderLineColumnName()},
+				#end
+			#end
+		FROM
+			${tableName}
+		WHERE uuid=#{uuid}
+	</select>
+
+	<select id="selectList" resultType="${modelClassName}">
+		SELECT
+			#foreach($columnDef in $!columnDefList)
+				#if($columnDefList.size() == $velocityCount)
+					$!{columnDef.getUnderLineColumnName()}
+				#else
+					$!{columnDef.getUnderLineColumnName()},
+				#end
+			#end
+		FROM
+			${tableName}
+		<where>
+		#foreach($columnDef in $!columnDefList)
+			#if($!{columnDef.isNumberType()})
+				<if test="$!{columnDef.columnName} > 0">
+					AND $!{columnDef.getUnderLineColumnName()}=#{$!{columnDef.columnName}}
+				</if>
+			#else
+				<if test="$!{columnDef.columnName} != null">
+					AND $!{columnDef.getUnderLineColumnName()}=#{$!{columnDef.columnName}}
+				</if>
+			#end
+		#end
+		</where>
+		order by gmt_modified desc
+		limit #{start}, #{count}
+	</select>
+	
+	<select id="count" resultType="int">
+		SELECT
+			count(1)
+		FROM
+			${tableName}
+		<where>
+		#foreach($columnDef in $!columnDefList)
+			#if($!{columnDef.isNumberType()})
+				<if test="$!{columnDef.columnName} > 0">
+					AND $!{columnDef.getUnderLineColumnName()}=#{$!{columnDef.columnName}}
+				</if>
+			#else
+				<if test="$!{columnDef.columnName} != null">
+					AND $!{columnDef.getUnderLineColumnName()}=#{$!{columnDef.columnName}}
+				</if>
+			#end
+		#end
+		</where>
+	</select>
+
+	<insert id="insert" parameterType="${modelClassName}">
+		INSERT INTO ${tableName}
+		(	
+			#foreach($columnDef in $!columnDefList)
+				#if($columnDefList.size() == $velocityCount)
+					$!{columnDef.getUnderLineColumnName()}
+				#else
+					$!{columnDef.getUnderLineColumnName()},
+				#end
+			#end
+		)
+		VALUES
+		(
+			#foreach($columnDef in $!columnDefList)
+				#if($columnDef.columnName == "gmtModified" || $columnDef.columnName == "gmtCreated")
+					now(),
+				#elseif($columnDefList.size() == $velocityCount)
+					#{$!{columnDef.columnName}}
+				#else
+					#{$!{columnDef.columnName}},
+				#end
+			#end
+		)
+	</insert>
+	
+	<insert id="insertList">
+		INSERT INTO ${tableName}
+		(	
+			#foreach($columnDef in $!columnDefList)
+				#if($columnDefList.size() == $velocityCount)
+					$!{columnDef.getUnderLineColumnName()}
+				#else
+					$!{columnDef.getUnderLineColumnName()},
+				#end
+			#end
+		)
+		VALUES
+		<foreach item="item" index="index" collection="list" separator=",">
+        (
+			#foreach($columnDef in $!columnDefList)
+				#if($columnDef.columnName == "gmtModified" || $columnDef.columnName == "gmtCreated")
+					now(),
+				#elseif($columnDefList.size() == $velocityCount)
+					#{item.$!{columnDef.columnName}}
+				#else
+					#{item.$!{columnDef.columnName}},
+				#end
+			#end
+		)
+		</foreach>
+	</insert>
+
+	<update id="update" parameterType="${modelClassName}">
+		UPDATE
+			${tableName}
+		SET
+			#foreach($columnDef in $!columnDefList)
+				#if($columnDef.columnName == "gmtCreated" || $columnDef.columnName == "uuid")
+					### ºöÂÔ
+				#elseif($columnDef.columnName == "gmtModified")
+					gmt_modified=now(),
+				#elseif($columnDefList.size() == $velocityCount)
+					$!{columnDef.getUnderLineColumnName()}=#{$!{columnDef.columnName}}
+				#else
+					$!{columnDef.getUnderLineColumnName()}=#{$!{columnDef.columnName}},
+				#end
+			#end
+		WHERE 
+			uuid = #{uuid}
+	</update>
+
+	<delete id="delete">
+		DELETE FROM
+			${tableName}
+		WHERE uuid=#{uuid}
+	</delete>
+	
+	<delete id="deleteList">
+		DELETE FROM
+			${tableName}
+		WHERE uuid  IN 
+		(
+			<foreach item="uuid" index="index" collection="list" separator=",">
+				#{uuid}
+			</foreach>
+		)
+	</delete>
+</mapper>
