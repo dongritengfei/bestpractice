@@ -16,15 +16,15 @@ import com.bestpractice.service.IDataService;
 
 public abstract class AbstractRestfullController<T extends BaseModel> implements IController<T> {
 	
-	private static class IntEditor extends CustomNumberEditor {
-		public IntEditor() {
-			super(Integer.class, true);
+	private static class NumberEditor<T extends Number> extends CustomNumberEditor {
+		public NumberEditor(Class<T> clazz) {
+			super(clazz, true);
 		}
 
 		public void setAsText(String text) throws IllegalArgumentException {
 			if (text == null || text.trim().equals("")) {
 				// Treat empty String as null value.
-				setValue(0);
+				super.setAsText("0");
 			} else {
 				// Use default valueOf methods for parsing text.
 				super.setAsText(text);
@@ -34,7 +34,12 @@ public abstract class AbstractRestfullController<T extends BaseModel> implements
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
-		binder.registerCustomEditor(int.class, null, new IntEditor());
+		binder.registerCustomEditor(int.class, null, new NumberEditor<Integer>(Integer.class));
+		binder.registerCustomEditor(long.class, null, new NumberEditor<Long>(Long.class));
+		binder.registerCustomEditor(short.class, null, new NumberEditor<Short>(Short.class));
+		binder.registerCustomEditor(byte.class, null, new NumberEditor<Byte>(Byte.class));
+		binder.registerCustomEditor(double.class, null, new NumberEditor<Double>(Double.class));
+		binder.registerCustomEditor(float.class, null, new NumberEditor<Float>(Float.class));
 	}
 	
 	/**
