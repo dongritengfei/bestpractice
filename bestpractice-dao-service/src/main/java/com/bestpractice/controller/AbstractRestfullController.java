@@ -3,6 +3,9 @@ package com.bestpractice.controller;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.propertyeditors.CustomNumberEditor;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -12,6 +15,28 @@ import com.bestpractice.dao.mybatis.model.BaseModel;
 import com.bestpractice.service.IDataService;
 
 public abstract class AbstractRestfullController<T extends BaseModel> implements IController<T> {
+	
+	private static class IntEditor extends CustomNumberEditor {
+		public IntEditor() {
+			super(Integer.class, true);
+		}
+
+		public void setAsText(String text) throws IllegalArgumentException {
+			if (text == null || text.trim().equals("")) {
+				// Treat empty String as null value.
+				setValue(0);
+			} else {
+				// Use default valueOf methods for parsing text.
+				super.setAsText(text);
+			}
+		}
+	}
+
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		binder.registerCustomEditor(int.class, null, new IntEditor());
+	}
+	
 	/**
 	 * 获取该领域模型的Service
 	 * 
